@@ -9,7 +9,7 @@ public class Main {
 
         String str = br.readLine();
 
-        int[] arr = new int[3];
+        int[] arr = new int[N];
         StringTokenizer st = new StringTokenizer(str);
         
         for(int i=0; i<N; i++){
