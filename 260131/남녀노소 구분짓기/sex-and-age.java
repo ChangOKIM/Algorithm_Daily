@@ -11,12 +11,12 @@ public class Main {
         int age = Integer.parseInt(br.readLine());
 
         if(sex == 0){
-            if(age>19){
+            if(age>=19){
                 System.out.println("MAN");
             }else
                 System.out.println("BOY");
         }else{
-            if(age>19){
+            if(age>=19){
                 System.out.println("WOMAN");
             }else{
                 System.out.println("GIRL");
