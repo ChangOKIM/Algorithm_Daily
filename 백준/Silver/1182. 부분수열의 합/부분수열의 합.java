@@ -1,50 +1,42 @@
-import java.io.*;
+/*
+ * 메모리:27,136kb, 시간:99ms
+ */
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static int[] arr;
-    static boolean[] visited;
-    static int count = 0;
-    static int N, S;
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        StringTokenizer st;
-
-        String str = br.readLine();
-
-        st = new StringTokenizer(str);
-        N = Integer.parseInt(st.nextToken());
-        arr = new int[N];
-        visited = new boolean[N];
-        S = Integer.parseInt(st.nextToken());
-
-        String str2= br.readLine();
-
-        st = new StringTokenizer(str2);
-
-        for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(st.nextToken());
-
-        }
-
-        dfs(0, 0);
-
-        if( S == 0) count--;
-
-        System.out.println(count);
-    }
-
-    static void dfs(int idx, int sum){
-        if(idx == N){
-            if(sum == S) count++;
-            return;
-        }
-
-        dfs(idx +1, sum + arr[idx]);
-
-        dfs(idx + 1, sum);
-    }
-
+	static StringTokenizer st;
+	static int cnt, N, S;
     
+	public static void main(String[] args) throws Exception{
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	st = new StringTokenizer(br.readLine());
+    	N = Integer.parseInt(st.nextToken());
+    	S = Integer.parseInt(st.nextToken());
+    	cnt = 0;
+    	
+    	arr = new int[N];
+    	st = new StringTokenizer(br.readLine());
+    	for(int i=0; i<N; i++) {
+    		arr[i] = Integer.parseInt(st.nextToken());
+    	}
+    	
+    	dfs(0, 0);
+    	
+    	if(S == 0) cnt--;
+    	System.out.println(cnt);
+	}
+	
+	static void dfs(int depth, int sum) {
+		if(depth == N) {
+			if(sum == S) {
+				cnt +=1;
+			}
+			return;
+		}
+		
+		dfs(depth+1, sum);
+		dfs(depth+1, sum + arr[depth]);
+	}
 }
