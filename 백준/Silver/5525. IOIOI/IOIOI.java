@@ -1,57 +1,63 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    static int N, M;
+    static String S;
+    static int len;
+    static int answer;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(br.readLine());
-        int M = Integer.parseInt(br.readLine());
-        String S = br.readLine();
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
+        S = br.readLine();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append('I');
-        for (int i = 0; i < N; i++) {
-            sb.append("OI");
-        }
-        String target = sb.toString();
+        len = 2 * N + 1;
+        answer = 0;
 
-        int windowSize = 2 * N + 1;
-        int answer = 0;
-
-        if (windowSize > M) {
+        if (len > M) {
             System.out.println(0);
             return;
         }
 
-        int countI = 0;
-        int countO = 0;
+        for (int start = 0; start + len <= M; start++) {
+            if (S.charAt(start) != 'I') continue;
 
-        for (int i = 0; i < windowSize; i++) {
-            if (S.charAt(i) == 'I') countI++;
-            else countO++;
-        }
-
-        if (countI == N + 1 && countO == N) {
-            if (S.substring(0, windowSize).equals(target)) {
+            if (check(start)) {
                 answer++;
             }
         }
 
-        for (int left = 0, right = windowSize; right < M; left++, right++) {
-            if (S.charAt(left) == 'I') countI--;
-            else countO--;
+        System.out.println(answer);
+    }
+    
+    static boolean check(int start) {
+        int end = start + len - 1;
 
-            if (S.charAt(right) == 'I') countI++;
-            else countO++;
-
-            if (countI == N + 1 && countO == N) {
-                if (S.substring(left + 1, right + 1).equals(target)) {
-                    answer++;
-                }
-            }
+        if (S.charAt(start) != 'I' || S.charAt(end) != 'I') {
+            return false;
         }
 
-        System.out.println(answer);
+        int left = start;
+        int right = end;
+        int lOffset = 0;
+        int rOffset = len - 1;
+
+        while (left <= right) {
+            char leftExpected = (lOffset % 2 == 0) ? 'I' : 'O';
+            char rightExpected = (rOffset % 2 == 0) ? 'I' : 'O';
+
+            if (S.charAt(left) != leftExpected) return false;
+            if (S.charAt(right) != rightExpected) return false;
+
+            left++;
+            right--;
+            lOffset++;
+            rOffset--;
+        }
+
+        return true;
     }
 }
