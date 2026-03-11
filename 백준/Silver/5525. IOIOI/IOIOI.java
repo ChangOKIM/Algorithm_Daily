@@ -1,35 +1,57 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
-	static int N, M;
-	static String S;
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		N = Integer.parseInt(br.readLine());
-		M = Integer.parseInt(br.readLine());
-		S = br.readLine();
-		
-		int answer = 0;
-        int count = 0;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        for (int i = 1; i < M - 1; i++) {
-            if (S.charAt(i - 1) == 'I' && S.charAt(i) == 'O' && S.charAt(i + 1) == 'I') {
-                count++;
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+        String S = br.readLine();
 
-                if (count >= N) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('I');
+        for (int i = 0; i < N; i++) {
+            sb.append("OI");
+        }
+        String target = sb.toString();
+
+        int windowSize = 2 * N + 1;
+        int answer = 0;
+
+        if (windowSize > M) {
+            System.out.println(0);
+            return;
+        }
+
+        int countI = 0;
+        int countO = 0;
+
+        for (int i = 0; i < windowSize; i++) {
+            if (S.charAt(i) == 'I') countI++;
+            else countO++;
+        }
+
+        if (countI == N + 1 && countO == N) {
+            if (S.substring(0, windowSize).equals(target)) {
+                answer++;
+            }
+        }
+
+        for (int left = 0, right = windowSize; right < M; left++, right++) {
+            if (S.charAt(left) == 'I') countI--;
+            else countO--;
+
+            if (S.charAt(right) == 'I') countI++;
+            else countO++;
+
+            if (countI == N + 1 && countO == N) {
+                if (S.substring(left + 1, right + 1).equals(target)) {
                     answer++;
                 }
-
-                i++;
-            } else {
-                count = 0;
             }
         }
 
         System.out.println(answer);
-		
-	}
+    }
 }
-
