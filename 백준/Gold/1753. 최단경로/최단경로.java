@@ -5,17 +5,21 @@ public class Main {
     static int V, E, K;
     static ArrayList<Node>[] graph;
     static int[] distance;
-    static boolean[] visited;
     static StringTokenizer st;
     static final int INF = Integer.MAX_VALUE;
 
-    static class Node {
+    static class Node implements Comparable<Node> {
         int end;
         int weight;
 
         public Node(int end, int weight) {
             this.end = end;
             this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.weight - o.weight;
         }
     }
 
@@ -30,7 +34,6 @@ public class Main {
 
         graph = new ArrayList[V + 1];
         distance = new int[V + 1];
-        visited = new boolean[V + 1];
 
         for (int i = 1; i <= V; i++) {
             graph[i] = new ArrayList<>();
@@ -58,29 +61,24 @@ public class Main {
     }
 
     static void dijkstra(int start) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(start, 0));
         distance[start] = 0;
 
-        for (int i = 1; i <= V; i++) {
-            int min = INF;
-            int current = -1;
+        while (!pq.isEmpty()) {
+            Node now = pq.poll();
 
-            for (int j = 1; j <= V; j++) {
-                if (!visited[j] && distance[j] < min) {
-                    min = distance[j];
-                    current = j;
-                }
-            }
+            int nowEnd = now.end;
+            int nowWeight = now.weight;
 
-            if (current == -1) break;
+            if (distance[nowEnd] < nowWeight) continue;
 
-            visited[current] = true;
+            for (int i = 0; i < graph[nowEnd].size(); i++) {
+                Node next = graph[nowEnd].get(i);
 
-            for (int j = 0; j < graph[current].size(); j++) {
-                Node next = graph[current].get(j);
-
-                if (!visited[next.end] && distance[current] != INF
-                        && distance[next.end] > distance[current] + next.weight) {
-                    distance[next.end] = distance[current] + next.weight;
+                if (distance[next.end] > nowWeight + next.weight) {
+                    distance[next.end] = nowWeight + next.weight;
+                    pq.add(new Node(next.end, distance[next.end]));
                 }
             }
         }
